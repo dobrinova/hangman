@@ -1,9 +1,12 @@
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <sstream>
+#include <cstring>
+#include "Settings.h"
+
 using namespace std;
 const int SHORTEST_WORD = 3;
-const int LONGEST_WORD = 10;
+const int LONGEST_WORD = 12;
 const int MINIMUM_ATTEMPTS = 1;
 const int MAXIMUM_ATTEMPTS = 10;
 
@@ -14,77 +17,89 @@ void MAIN_MENU() {
 		<< "3. Exit" << '\n' << '\n';
 }
 
-void SETTINGS() {
-	cout << '\t' << "SETTINGS" << '\n'
-		<< "1. Change the lenght of the word. (the shortest word possible consists of 3 letters and the longest - of 10)" << '\n'
-		<< "2. Change the amount of attempts. (the minimum attempts possible is 1 and the maximum is 10)" << '\n'
-		<< "3. Return to main menu." << '\n' << '\n';
-}
-
-int RandomIndex(const int first, const int last) {
+int FindRandomIndex(const int first, const int last) {
 	srand(time(0));
 	return first + (rand() % last);				
 }
-/*Стартиране на нова игра
-Програмата избира случайна дума от речника.
-Извежда се думата като неотгатнатите букви се заместват с _. (например за думата cat първоначално се извежда _ _ _)
-Потребителя въвежда буква.
-При въвеждане на невалидна буква (символ не от латинската азбука) се извежда съобщение за грешка.
-При въвеждане на валидна буква:
-*/
-void NewGame(int lenght, int attempts) {
-	//input a word
+
+bool Validation(char letter_array[1]) {
+	if (letter_array[1] < 'a' || letter_array[1] > 'z')
+	{
+		cout << "Invalid imput. Put down another LETTER.";
+		return 0;
+	}
+	return 1;
+}
+
+void NewGame(int &lenght, int &attempts) {
 	const int ByDefault = 4;
 	char word[ByDefault];
 	fstream file;
 	file.open("3letters.txt");
-	
-	const int RandomWord = RandomIndex(1, 4);
+	const int WORDS_PER_FILE = 15;
+	const int RandomWord = FindRandomIndex(1, WORDS_PER_FILE);
 	for (size_t i = 0; i < RandomWord ; i++)
 	{
 		file >> word;
 	}
-	cout << word;
-}
 
-void Settings(int* lenght, int* attempts) {
-	SETTINGS();
-	int SettChoice;
-	cin >> SettChoice;
-	while (SettChoice != 3)
+	// Тurning a char (the word) into string
+	string line = word;												
+	string arr_word[LONGEST_WORD];
+	int i = 0;
+	stringstream ssin(line);
+	while (ssin.good() && i < lenght) {
+		ssin >> arr_word[i];
+		++i;
+	}
+	
+	//It is possible to turn the string into a stream by using the std::stringstream class 
+	//(its constructor takes a string as parameter).Once it's built, you can use the >> operator 
+	//on it (like on regular file based streams), which will extract, or tokenize word from it:
+	const char dashes = '_';
+	for (size_t dash = 0; dash < lenght; dash++)
 	{
-		if (SettChoice == 1)
+		cout << dashes;
+	}
+
+	string letter_attempt;
+	cin >> letter_attempt;
+
+	/*Turn string into array*/
+	char letter_array[1];
+	strcpy(letter_array, line.c_str());						//Makes mistake
+	
+	Validation(letter_array);
+	while (Validation == 0)
+	{
+		cin >> letter_attempt;
+		char letter_array[1];
+		strcpy(letter_array, line.c_str());
+		Validation(letter_array);
+	}
+
+	for (size_t i = 0; i < lenght ; i++) {
+		if (arr_word[i] == letter_attempt )
 		{
-			cout << "Imput the wanted lenght:" ;
-			int NewLenght;
-			cin >> NewLenght;
-			while (NewLenght < SHORTEST_WORD || NewLenght > LONGEST_WORD)
-			{
-				cout << "Imput valid lenght:";
-				cin >> NewLenght;
-			}
-			*lenght = NewLenght;
-		}
-		else if (SettChoice == 2)
-		{
-			cout << "Imput the wanted attempts:" ;
-			int NewAttempts;
-			cin >> NewAttempts;
-			while (NewAttempts < MINIMUM_ATTEMPTS || NewAttempts > MAXIMUM_ATTEMPTS)
-			{
-				cout << "Imput valid attempts:";
-				cin >> NewAttempts;
-			}
-			*attempts = NewAttempts;
+			cout << arr_word[i];
 		}
 		else
 		{
-			cout << "Error.";
+			cout << dashes;
+
 		}
-		SETTINGS();
-		cin >> SettChoice;
 	}
+	/*
+Извежда се думата като неотгатнатите букви се заместват с _. 
+(например за думата cat първоначално се извежда _ _ _)
+Потребителя въвежда буква.
+При въвеждане на невалидна буква (символ не от латинската азбука) се извежда съобщение за грешка.
+При въвеждане на валидна буква:
+*/
+
 }
+
+
 
 int main() {
 	int attempts = 3;							//By default
