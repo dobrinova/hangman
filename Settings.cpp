@@ -1,3 +1,17 @@
+/**
+*
+* Solution to course project # 14
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2021/2022
+*
+* @author Monika Dobrinova
+* @idnumber 8MI0600008
+* @compiler VC
+*
+* <file with helper functions for the Settings option>
+*
+*/
 #include <iostream>
 #include "Settings.h"
 
@@ -6,12 +20,12 @@ using namespace std;
 const int SHORTEST_WORD = 3;
 const int LONGEST_WORD = 12;
 const int MINIMUM_ATTEMPTS = 1;
-const int MAXIMUM_ATTEMPTS = 10;
+const int MAXIMUM_ATTEMPTS = 15;
 
 void SETTINGS() {
 	cout << '\t' << "SETTINGS" << '\n'
-		<< "1. Change the lenght of the word. (the shortest word possible consists of 3 letters and the longest - of 10)" << '\n'
-		<< "2. Change the amount of attempts. (the minimum attempts possible is 1 and the maximum is 10)" << '\n'
+		<< "1. Change the lenght of the word. (the shortest word possible consists of 3 letters and the longest - of 12)" << '\n'
+		<< "2. Change the amount of attempts. (the minimum attempts possible is 1 and the maximum is 15)" << '\n'
 		<< "3. Return to main menu." << '\n' << '\n';
 }
 
