@@ -1,6 +1,0 @@
-cd ./source/repo/hangman
-
-git add .
-git commit -m "pi6ka"
-git push
-gotova si bep4e
